@@ -1,11 +1,11 @@
-## COUNTRYIES WITH FRIENDS ##
+## COUNTRIES WITH FRIENDS ##
 
-This game is mean to be played with your friends. At least 3 people.
-Players choose their names.
-The first player chooses a country.
-The basic idea is that players have to input country names based in the last letter if the previous country entered by a player.
-Each correct player entry is visualized with a pin in a wold map.
+This game is mean to be played with at least 2 friends.
+To start, players choose their names.
+After this, the first player chooses a country.
+The basic objective of the game is that players have to input country names based on the last letter of the previous country entered by a player.
+Each correct  entry is visualized with a pin in a world map.
 Correct entries are given a score 1.
-Incorrect scores are given a score of -1.
+Incorrect entries are given a score of -1.
 All entries are captured in a table.
-The summary of all scores in displayed for each player.
+The sum of all scores are displayed for each player in a table.

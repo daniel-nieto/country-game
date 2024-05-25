@@ -19,26 +19,33 @@
         <input type="text" id="country-input" placeholder="Enter a country name">
         <button onclick="locateCountry()">Locate Country</button>
     </div>
-    <div id="map"></div>
-    <h2>Correct Entries</h2>
-    <table id="correct-entries">
+    <div id="map" style="height: 500px;"></div>
+
+    <h2>Current Scores</h2>
+    <table id="score-table">
         <thead>
             <tr>
-                <th>Player</th>
-                <th>Country</th>
-                <th>Score</th>
+                <th id="player1-score-header">Player 1 Score</th>
+                <th id="player2-score-header">Player 2 Score</th>
             </tr>
         </thead>
         <tbody>
         </tbody>
     </table>
-    <h2>Incorrect Entries</h2>
-    <table id="incorrect-entries">
-        <tr>
-            <th>Player</th>
-            <th>Country</th>
-        </tr>
+
+    <h2>Historical Entries</h2>
+    <table id="historical-entries">
+        <thead>
+            <tr>
+                <th>Player</th>
+                <th>Country</th>
+                <th>Result</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
     </table>
+
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="script.js"></script>
 </body>

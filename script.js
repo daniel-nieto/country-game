@@ -12,15 +12,15 @@ var playerColors = ['red', 'blue'];
 var playerMarkers = [[], []];
 var lastCountry = '';
 var scores = [0, 0];
-var incorrectEntriesTable = document.getElementById('incorrect-entries');
-var correctEntriesTableBody = document.getElementById('correct-entries').getElementsByTagName('tbody')[0];
+var historicalEntriesTableBody = document.getElementById('historical-entries').getElementsByTagName('tbody')[0];
+var scoreTableBody = document.getElementById('score-table').getElementsByTagName('tbody')[0];
 
 function startGame() {
     var player1Name = document.getElementById('player1-name').value.trim();
     var player2Name = document.getElementById('player2-name').value.trim();
 
     if (!player1Name || !player2Name) {
-        alert("Please enter names for both players.");
+        alert("🛑 Please enter names for both players.");
         return;
     }
 
@@ -31,7 +31,8 @@ function startGame() {
 
     document.getElementById('current-player').textContent = players[currentPlayerIndex] + "'s turn";
     document.getElementById('game-controls').style.display = 'block';
-    correctEntriesTableBody.innerHTML = ''; // Clear previous entries
+    historicalEntriesTableBody.innerHTML = ''; // Clear previous entries
+    updateScoreTable(); // Clear and update score table
 }
 
 function locateCountry() {
@@ -44,9 +45,9 @@ function locateCountry() {
 
     // Check if the country name follows the rule
     if (lastCountry && countryName[0].toLowerCase() !== lastCountry.slice(-1).toLowerCase()) {
-        addIncorrectEntry(players[currentPlayerIndex], countryName);
+        addHistoricalEntry(players[currentPlayerIndex], countryName, false);
         subtractScore(currentPlayerIndex); // Subtract score for incorrect entry
-        alert("Country name must start with the last letter of the previous country.");
+        alert("🛑 Country name must start with the last letter of the previous country.");
         switchTurn();
         return;
     }
@@ -56,9 +57,9 @@ function locateCountry() {
         .then(response => response.json())
         .then(data => {
             if (data.length === 0) {
-                addIncorrectEntry(players[currentPlayerIndex], countryName);
+                addHistoricalEntry(players[currentPlayerIndex], countryName, false);
                 subtractScore(currentPlayerIndex); // Subtract score for incorrect entry
-                alert("Country not found. Please try again.");
+                alert("🛑 Country not found. You lose a point.");
                 switchTurn();
                 return;
             }
@@ -67,7 +68,7 @@ function locateCountry() {
             var lon = data[0].lon;
 
             // Set the map view to the country's coordinates
-            map.setView([lat, lon], 5);
+            map.setView([lat, lon], 3);
 
             // Add a marker to the map at the country's coordinates with player-specific color
             var marker = L.circleMarker([lat, lon], {
@@ -82,8 +83,8 @@ function locateCountry() {
             // Update the last country
             lastCountry = countryName;
 
-            // Add to correct entries
-            addCorrectEntry(players[currentPlayerIndex], countryName);
+            // Add to historical entries
+            addHistoricalEntry(players[currentPlayerIndex], countryName, true);
             addScore(currentPlayerIndex); // Add score for correct entry
 
             switchTurn();
@@ -102,46 +103,29 @@ function switchTurn() {
 
 function addScore(playerIndex) {
     scores[playerIndex]++;
-    updateScoreDisplay();
+    updateScoreTable();
 }
 
 function subtractScore(playerIndex) {
     scores[playerIndex]--;
-    updateScoreDisplay();
+    updateScoreTable();
 }
 
-function updateScoreDisplay() {
-    for (var i = 0; i < players.length; i++) {
-        var scoreCells = document.querySelectorAll(`#correct-entries td[data-player="${players[i]}"] .score`);
-        scoreCells.forEach(cell => {
-            cell.textContent = scores[i];
-        });
-    }
+function updateScoreTable() {
+    scoreTableBody.innerHTML = '';
+    var newRow = scoreTableBody.insertRow();
+    var player1ScoreCell = newRow.insertCell(0);
+    var player2ScoreCell = newRow.insertCell(1);
+    player1ScoreCell.textContent = `${players[0]}: ${scores[0]}`;
+    player2ScoreCell.textContent = `${players[1]}: ${scores[1]}`;
 }
 
-function addIncorrectEntry(player, country) {
-    var newRow = incorrectEntriesTable.insertRow();
+function addHistoricalEntry(player, country, isCorrect) {
+    var newRow = historicalEntriesTableBody.insertRow();
     var playerCell = newRow.insertCell(0);
     var countryCell = newRow.insertCell(1);
+    var resultCell = newRow.insertCell(2);
     playerCell.textContent = player;
     countryCell.textContent = country;
-}
-
-function addCorrectEntry(player, country) {
-    var newRow = correctEntriesTableBody.insertRow();
-    var playerCell = newRow.insertCell(0);
-    var countryCell = newRow.insertCell(1);
-    var scoreCell = newRow.insertCell(2);
-    playerCell.textContent = player;
-    playerCell.setAttribute('data-player', player);
-    countryCell.textContent = country;
-
-    // Add a span element to hold the score
-    var scoreSpan = document.createElement('span');
-    scoreSpan.textContent = scores[players.indexOf(player)];
-    scoreSpan.classList.add('score');
-    scoreCell.appendChild(scoreSpan);
-
-    // Update the score display
-    updateScoreDisplay();
+    resultCell.textContent = isCorrect ? 'Correct' : 'Incorrect';
 }
