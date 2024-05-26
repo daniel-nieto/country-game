@@ -29,7 +29,7 @@ function startGame() {
     lastCountry = '';
     scores = [0, 0];
 
-    document.getElementById('current-player').textContent = players[currentPlayerIndex] + "'s turn";
+    document.getElementById('current-player').textContent = players[currentPlayerIndex] + "'s turn ⬇️";
     document.getElementById('game-controls').style.display = 'block';
     historicalEntriesTableBody.innerHTML = ''; // Clear previous entries
     updateScoreTable(); // Clear and update score table
@@ -68,7 +68,7 @@ function locateCountry() {
             var lon = data[0].lon;
 
             // Set the map view to the country's coordinates
-            map.setView([lat, lon], 3);
+            map.setView([lat, lon], 2);
 
             // Add a marker to the map at the country's coordinates with player-specific color
             var marker = L.circleMarker([lat, lon], {
@@ -97,7 +97,7 @@ function locateCountry() {
 
 function switchTurn() {
     currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
-    document.getElementById('current-player').textContent = players[currentPlayerIndex] + "'s turn";
+    document.getElementById('current-player').textContent = players[currentPlayerIndex] + "'s turn ⬇️";
     document.getElementById('country-input').value = '';
 }
 
