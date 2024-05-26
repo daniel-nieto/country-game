@@ -127,5 +127,5 @@ function addHistoricalEntry(player, country, isCorrect) {
     var resultCell = newRow.insertCell(2);
     playerCell.textContent = player;
     countryCell.textContent = country;
-    resultCell.textContent = isCorrect ? 'Correct' : 'Incorrect';
+    resultCell.textContent = isCorrect ? '✅' : '❌';
 }
